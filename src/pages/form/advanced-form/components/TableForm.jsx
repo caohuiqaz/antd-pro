@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, Popconfirm, Table, message } from 'antd';
+import { Button, Divider, Input, Popconfirm, Table, message, Select } from 'antd';
 import React, { useState } from 'react';
 import styles from '../style.less';
 
@@ -35,6 +35,7 @@ const TableForm = ({ value, onChange }) => {
       key: `NEW_TEMP_ID_${index}`,
       workId: '',
       name: '',
+      fixLot: '',
       department: '',
       editable: true,
       isNew: true,
@@ -73,7 +74,7 @@ const TableForm = ({ value, onChange }) => {
 
       const target = getRowByKey(key) || {};
 
-      if (!target.workId || !target.name || !target.department) {
+      if (!target.workId || !target.name || !target.fixLot) {
         message.error('请填写完整成员信息。');
         e.target.focus();
         setLoading(false);
@@ -124,7 +125,7 @@ const TableForm = ({ value, onChange }) => {
       title: 'Senders details',
       dataIndex: 'name',
       key: 'name',
-      width: '20%',
+      width: '14%',
       render: (text, record) => {
         if (record.editable) {
           return (
@@ -142,7 +143,7 @@ const TableForm = ({ value, onChange }) => {
       },
     },
     {
-      title: '工号',
+      title: 'Lot Size Multiplier',
       dataIndex: 'workId',
       key: 'workId',
       width: '20%',
@@ -153,7 +154,7 @@ const TableForm = ({ value, onChange }) => {
               value={text}
               onChange={(e) => handleFieldChange(e, 'workId', record.key)}
               onKeyPress={(e) => handleKeyPress(e, record.key)}
-              placeholder="工号"
+              placeholder=""
             />
           );
         }
@@ -162,19 +163,49 @@ const TableForm = ({ value, onChange }) => {
       },
     },
     {
-      title: '所属部门',
-      dataIndex: 'department',
-      key: 'department',
-      width: '40%',
+      title: 'Fix Lot Size',
+      dataIndex: 'fixLot',
+      key: 'fixLot',
+      width: '20%',
       render: (text, record) => {
         if (record.editable) {
           return (
             <Input
               value={text}
-              onChange={(e) => handleFieldChange(e, 'department', record.key)}
+              onChange={(e) => handleFieldChange(e, 'fixLot', record.key)}
               onKeyPress={(e) => handleKeyPress(e, record.key)}
-              placeholder="所属部门"
+              placeholder=""
             />
+          );
+        }
+
+        return text;
+      },
+    },
+    {
+      title: 'Server',
+      dataIndex: 'department',
+      key: 'department',
+      width: '14%',
+      render: (text, record) => {
+        if (record.editable) {
+          return (
+            // <Input
+            //   value={text}
+            //   onChange={(e) => handleFieldChange(e, 'department', record.key)}
+            //   onKeyPress={(e) => handleKeyPress(e, record.key)}
+            //   placeholder="所属部门"
+            // />
+            <Select
+              // value={text}
+              // onChange={(e) => handleFieldChange(e, 'department', record.key)}
+              onKeyPress={(e) => handleKeyPress(e, record.key)}
+              placeholder=""
+            >
+              <Select.Option value="us01">us01</Select.Option>
+              <Select.Option value="us03">us03</Select.Option>
+              <Select.Option value="us07">us07</Select.Option>
+            </Select>
           );
         }
 

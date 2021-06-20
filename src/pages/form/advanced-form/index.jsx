@@ -1,10 +1,15 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, DatePicker, Form, Input, Popover, Row, Select, TimePicker } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, Popover, Row, Select, Space, InputNumber } from 'antd';
 import React, { useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { connect } from 'umi';
 import TableForm from './components/TableForm';
 import styles from './style.less';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import {default as UUID} from "node-uuid";
+
+const { TextArea } = Input;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const fieldLabels = {
@@ -25,20 +30,20 @@ const tableData = [
   {
     key: '1',
     workId: '00001',
-    name: 'John Brown',
-    department: 'New York No. 1 Lake Park',
+    name: 'user1',
+    department: 'us03',
   },
   {
     key: '2',
     workId: '00002',
-    name: 'Jim Green',
-    department: 'London No. 1 Lake Park',
+    name: 'user2',
+    department: 'us01',
   },
   {
     key: '3',
     workId: '00003',
-    name: 'Joe Black',
-    department: 'Sidney No. 1 Lake Park',
+    name: 'user3',
+    department: 'us02',
   },
 ];
 
@@ -109,6 +114,10 @@ const AdvancedForm = ({ submitting, dispatch }) => {
     setError(errorInfo.errorFields);
   };
 
+  
+  const uuid = UUID.v4(); 
+  
+
   return (
     <Form
       form={form}
@@ -126,7 +135,7 @@ const AdvancedForm = ({ submitting, dispatch }) => {
             <Col lg={6} md={12} sm={24}>
               <Form.Item
                 label={fieldLabels.name}
-                name="name"
+                name="follower_login"
                 rules={[
                   {
                     required: true,
@@ -153,7 +162,7 @@ const AdvancedForm = ({ submitting, dispatch }) => {
             >
               <Form.Item
                 label={fieldLabels.owner}
-                name="owner"
+                name="follower_server"
                 rules={[
                   {
                     required: true,
@@ -171,12 +180,12 @@ const AdvancedForm = ({ submitting, dispatch }) => {
           </Row>
         </Card>
 
-        <Card title="任务管理" className={styles.card} bordered={false}>
+        <Card title="Suffix" className={styles.card} bordered={false}>
           <Row gutter={16}>
             <Col lg={6} md={12} sm={24}>
               <Form.Item
-                label={fieldLabels.name2}
-                name="name2"
+                label="Suffix"
+                name="suffix"
                 rules={[
                   {
                     required: true,
@@ -184,7 +193,7 @@ const AdvancedForm = ({ submitting, dispatch }) => {
                   },
                 ]}
               >
-                <Input placeholder="请输入" />
+                <TextArea placeholder="USDAUD..." />
               </Form.Item>
             </Col>
             <Col
@@ -201,8 +210,8 @@ const AdvancedForm = ({ submitting, dispatch }) => {
               sm={24}
             >
               <Form.Item
-                label={fieldLabels.url2}
-                name="url2"
+                label="UUID"
+                name="uuid"
                 rules={[
                   {
                     required: true,
@@ -210,130 +219,83 @@ const AdvancedForm = ({ submitting, dispatch }) => {
                   },
                 ]}
               >
-                <Input placeholder="请输入" />
+                <Input placeholder="" value={uuid} />
               </Form.Item>
             </Col>
-            <Col
-              xl={{
-                span: 8,
-                offset: 2,
-              }}
-              lg={{
-                span: 10,
-              }}
-              md={{
-                span: 24,
-              }}
-              sm={24}
-            >
-              <Form.Item
-                label={fieldLabels.owner2}
-                name="owner2"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择管理员',
-                  },
-                ]}
-              >
-                <Select placeholder="请选择管理员">
-                  <Option value="xiao">付晓晓</Option>
-                  <Option value="mao">周毛毛</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col lg={6} md={12} sm={24}>
-              <Form.Item
-                label={fieldLabels.approver2}
-                name="approver2"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择审批员',
-                  },
-                ]}
-              >
-                <Select placeholder="请选择审批员">
-                  <Option value="xiao">付晓晓</Option>
-                  <Option value="mao">周毛毛</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col
-              xl={{
-                span: 6,
-                offset: 2,
-              }}
-              lg={{
-                span: 8,
-              }}
-              md={{
-                span: 12,
-              }}
-              sm={24}
-            >
-              <Form.Item
-                label={fieldLabels.dateRange2}
-                name="dateRange2"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入',
-                  },
-                ]}
-              >
-                <TimePicker
-                  placeholder="提醒时间"
-                  style={{
-                    width: '100%',
-                  }}
-                  getPopupContainer={(trigger) => {
-                    if (trigger && trigger.parentNode) {
-                      return trigger.parentNode;
-                    }
-
-                    return trigger;
-                  }}
-                />
-              </Form.Item>
-            </Col>
-            <Col
-              xl={{
-                span: 8,
-                offset: 2,
-              }}
-              lg={{
-                span: 10,
-              }}
-              md={{
-                span: 24,
-              }}
-              sm={24}
-            >
-              <Form.Item
-                label={fieldLabels.type2}
-                name="type2"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择仓库类型',
-                  },
-                ]}
-              >
-                <Select placeholder="请选择仓库类型">
-                  <Option value="private">私密</Option>
-                  <Option value="public">公开</Option>
-                </Select>
-              </Form.Item>
-            </Col>
+           
           </Row>
         </Card>
         <Card title="Sender Details" bordered={false}>
-          <Form.Item name="members">
+          {/* <Form.Item name="members">
             <TableForm />
-          </Form.Item>
+          </Form.Item> */}
+           <Form.List name="users">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                    <Form.Item
+                      {...restField}
+                      label="Login"
+                      name={[name, 'sender_login']}
+                      fieldKey={[fieldKey, 'sender_login']}
+                      rules={[{ required: true, message: 'Missing login name' }]}
+                    >
+                      <Input placeholder="" />
+                    </Form.Item>
+                    <Form.Item
+                       {...restField}
+                        label="Server"
+                        name="sender_server"
+                        fieldKey={[fieldKey, 'sender_server']}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please select server',
+                          },
+                        ]}
+                      >
+                        <Select placeholder="" style={{ width: '90px' }}>
+                          <Option value="us01">us01</Option>
+                          <Option value="us03">us03</Option>
+                          <Option value="us07">us07</Option>
+                        </Select>
+                      </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      label="Lot Size Multiplier"
+                      name={[name, 'lotMultiplier']}
+                      fieldKey={[fieldKey, 'lotMultiplier']}
+                      rules={[{ 
+                        required: true, message: 'Missing Lot Size'                        
+                      },{type: 'number', min: 0 }                       
+                      ]}
+                    >
+                      <InputNumber placeholder="" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      label="Fix Lot Size"
+                      name={[name, 'fixLotSize']}
+                      fieldKey={[fieldKey, 'fixLotSize']}
+                      rules={[{ 
+                        required: true, message: 'Missing Fix Lot Size'                   
+                      },{type: 'number', min: 0 }
+                    ]}
+                    >
+                      <InputNumber placeholder="" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Add field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Card>
       </PageContainer>
       <FooterToolbar>
